@@ -13,12 +13,18 @@ func validateUserInput(firstName string, lastName string, email string, userTick
 }
 
 type ConsoleOptions struct {
-	msg         string
-	color       string
-	bgColor     string
-	isBold      bool
-	isUnderline bool
-	isBanner    bool
+	msg             string
+	color           string
+	bgColor         string
+	isBold          bool
+	isUnderline     bool
+	isItalic        bool
+	isDim           bool
+	isBlink         bool
+	isReverse       bool
+	isHidden        bool
+	isStrikethrough bool
+	isBanner        bool
 }
 
 func consoleLog(options ConsoleOptions) {
@@ -58,19 +64,41 @@ func consoleLog(options ConsoleOptions) {
 	}
 
 	switch options.color {
+	case "black":
+		options.msg = styles[options.color] + options.msg
 	case "red":
 		options.msg = styles[options.color] + options.msg
+	case "green":
+		options.msg = styles[options.color] + options.msg
+	case "yellow":
+		options.msg = styles[options.color] + options.msg
 	case "blue":
+		options.msg = styles[options.color] + options.msg
+	case "magenta":
+		options.msg = styles[options.color] + options.msg
+	case "cyan":
+		options.msg = styles[options.color] + options.msg
+	case "white":
 		options.msg = styles[options.color] + options.msg
 	default:
 	}
 
 	switch options.bgColor {
+	case "bgBlack":
+		options.msg = styles[options.bgColor] + options.msg
 	case "bgRed":
+		options.msg = styles[options.bgColor] + options.msg
+	case "bgGreen":
+		options.msg = styles[options.bgColor] + options.msg
+	case "bgYellow":
 		options.msg = styles[options.bgColor] + options.msg
 	case "bgBlue":
 		options.msg = styles[options.bgColor] + options.msg
+	case "bgMagenta":
+		options.msg = styles[options.bgColor] + options.msg
 	case "bgCyan":
+		options.msg = styles[options.bgColor] + options.msg
+	case "bgWhite":
 		options.msg = styles[options.bgColor] + options.msg
 	default:
 	}
@@ -80,6 +108,24 @@ func consoleLog(options ConsoleOptions) {
 	}
 	if options.isUnderline {
 		options.msg = styles["underline"] + options.msg
+	}
+	if options.isItalic {
+		options.msg = styles["italic"] + options.msg
+	}
+	if options.isDim {
+		options.msg = styles["dim"] + options.msg
+	}
+	if options.isBlink {
+		options.msg = styles["blink"] + options.msg
+	}
+	if options.isReverse {
+		options.msg = styles["reverse"] + options.msg
+	}
+	if options.isHidden {
+		options.msg = styles["hidden"] + options.msg
+	}
+	if options.isStrikethrough {
+		options.msg = styles["strikethrough"] + options.msg
 	}
 
 	if options.isBanner {
