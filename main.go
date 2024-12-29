@@ -45,33 +45,45 @@ func main() {
 			}
 		} else {
 			if !isValidName {
-				fmt.Println("Firstname and Lastname length must be greater than 1")
+				consoleLog(ConsoleOptions{
+					msg:   "Firstname and Lastname length must be greater than 1",
+					color: "red",
+				})
 			}
 			if !isValidEmail {
-				fmt.Println("Email must contain '@' and '.'")
+				consoleLog(ConsoleOptions{
+					msg:   "Email must contain '@' and '.'",
+					color: "red",
+				})
 			}
 			if !isValidTicketNumber {
-				fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
+				consoleLog(ConsoleOptions{
+					msg:   fmt.Sprintf("We only have %v tickets remaining, so you can't book %v tickets", remainingTickets, userTickets),
+					color: "red",
+				})
 			}
 		}
 	}
 }
 
 func greetUsers() {
-	// consoleLog(fmt.Sprintf("Welcome to %v ticket booking application\n", conferenceName), "red", "", true, false)
 	consoleLog(ConsoleOptions{
 		msg:      fmt.Sprintf("Welcome to %v ticket booking application", conferenceName),
 		bgColor:  "bgCyan",
 		isBold:   true,
 		isBanner: true,
 	})
-	fmt.Println("We have total of", conferenceTickets, "tickets and", remainingTickets, "tickets are available")
-	// consoleLog("Book your tickets here\n", "blue", "", true, false)
 	consoleLog(ConsoleOptions{
-		msg:    "Book your tickets here",
+		msg:    fmt.Sprint("We have total of ", conferenceTickets, " tickets and ", remainingTickets, " tickets are available"),
 		color:  "blue",
 		isBold: true,
 	})
+	consoleLog(ConsoleOptions{
+		msg:    "Book your tickets here:",
+		color:  "blue",
+		isBold: true,
+	})
+	fmt.Println()
 }
 
 func getFirstNames() []string {
@@ -88,13 +100,25 @@ func getUserInput() (string, string, string, uint8) {
 	var email string
 	var userTickets uint8
 
-	fmt.Println("Enter your first name:")
+	consoleLog(ConsoleOptions{
+		msg:   "Enter your first name:",
+		color: "magenta",
+	})
 	fmt.Scan(&firstName)
-	fmt.Println("Enter your last name:")
+	consoleLog(ConsoleOptions{
+		msg:   "Enter your last name:",
+		color: "magenta",
+	})
 	fmt.Scan(&lastName)
-	fmt.Println("Enter your email:")
+	consoleLog(ConsoleOptions{
+		msg:   "Enter your email:",
+		color: "magenta",
+	})
 	fmt.Scan(&email)
-	fmt.Println("Enter number of tickets:")
+	consoleLog(ConsoleOptions{
+		msg:   "Enter number of tickets:",
+		color: "magenta",
+	})
 	fmt.Scan(&userTickets)
 
 	return firstName, lastName, email, userTickets
