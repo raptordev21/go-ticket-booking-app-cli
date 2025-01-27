@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"sync"
 	"time"
+
+	"github.com/raptordev21/console"
+	"github.com/raptordev21/console/colors"
 )
 
 const conferenceTickets uint8 = 50
@@ -37,52 +40,33 @@ func main() {
 			go sendTicket(userTickets, firstName, lastName, email)
 
 			firstNames := getFirstNames()
-			fmt.Printf("The first names of bookings: %v\n", firstNames)
+			console.Info(fmt.Sprintf("The first names of bookings: %v\n", firstNames))
 
 			if remainingTickets == 0 {
-				fmt.Println("Our", conferenceName, "is booked out. Come back next year.")
+				console.Warn(fmt.Sprint("Our ", conferenceName, " is booked out. Come back next year."))
 				break
 			}
 		} else {
 			if !isValidName {
-				consoleLog(ConsoleOptions{
-					msg:   "Firstname and Lastname length must be greater than 1",
-					color: "red",
-				})
+				opts := console.LogOptions{Msg: "Firstname and Lastname length must be greater than 1", Color: colors.Color.Red}
+				console.Log(opts)
 			}
 			if !isValidEmail {
-				consoleLog(ConsoleOptions{
-					msg:   "Email must contain '@' and '.'",
-					color: "red",
-				})
+				opts := console.LogOptions{Msg: "Email must contain '@' and '.'", Color: colors.Color.Red}
+				console.Log(opts)
 			}
 			if !isValidTicketNumber {
-				consoleLog(ConsoleOptions{
-					msg:   fmt.Sprintf("We only have %v tickets remaining, so you can't book %v tickets", remainingTickets, userTickets),
-					color: "red",
-				})
+				opts := console.LogOptions{Msg: fmt.Sprintf("We only have %v tickets remaining, so you can't book %v tickets", remainingTickets, userTickets), Color: colors.Color.Red}
+				console.Log(opts)
 			}
 		}
 	}
 }
 
 func greetUsers() {
-	consoleLog(ConsoleOptions{
-		msg:      fmt.Sprintf("Welcome to %v ticket booking application", conferenceName),
-		bgColor:  "bgCyan",
-		isBold:   true,
-		isBanner: true,
-	})
-	consoleLog(ConsoleOptions{
-		msg:    fmt.Sprint("We have total of ", conferenceTickets, " tickets and ", remainingTickets, " tickets are available"),
-		color:  "blue",
-		isBold: true,
-	})
-	consoleLog(ConsoleOptions{
-		msg:    "Book your tickets here:",
-		color:  "blue",
-		isBold: true,
-	})
+	console.Log(console.LogOptions{Msg: fmt.Sprintf("Welcome to %v ticket booking application", conferenceName), BgColor: colors.Color.BgCyan, IsBold: true, IsBanner: true})
+	console.Log(console.LogOptions{Msg: fmt.Sprint("We have total of ", conferenceTickets, " tickets and ", remainingTickets, " tickets are available"), Color: colors.Color.Blue, IsBold: true})
+	console.Log(console.LogOptions{Msg: "Book your tickets here:", Color: colors.Color.Blue, IsBold: true})
 	fmt.Println()
 }
 
@@ -100,25 +84,16 @@ func getUserInput() (string, string, string, uint8) {
 	var email string
 	var userTickets uint8
 
-	consoleLog(ConsoleOptions{
-		msg:   "Enter your first name:",
-		color: "magenta",
-	})
+	console.Log(console.LogOptions{Msg: "Enter your first name:", Color: colors.Color.Magenta})
 	fmt.Scan(&firstName)
-	consoleLog(ConsoleOptions{
-		msg:   "Enter your last name:",
-		color: "magenta",
-	})
+
+	console.Log(console.LogOptions{Msg: "Enter your last name:", Color: colors.Color.Magenta})
 	fmt.Scan(&lastName)
-	consoleLog(ConsoleOptions{
-		msg:   "Enter your email:",
-		color: "magenta",
-	})
+
+	console.Log(console.LogOptions{Msg: "Enter your email:", Color: colors.Color.Magenta})
 	fmt.Scan(&email)
-	consoleLog(ConsoleOptions{
-		msg:   "Enter number of tickets:",
-		color: "magenta",
-	})
+
+	console.Log(console.LogOptions{Msg: "Enter number of tickets:", Color: colors.Color.Magenta})
 	fmt.Scan(&userTickets)
 
 	return firstName, lastName, email, userTickets
@@ -135,18 +110,16 @@ func bookTicket(userTickets uint8, firstName string, lastName string, email stri
 	}
 
 	bookings = append(bookings, userData)
-	fmt.Printf("List of bookings: %v\n", bookings)
+	console.Info(fmt.Sprintf("List of bookings: %v\n", bookings))
 
-	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
-	fmt.Printf("%v tickets remaining for %v\n", remainingTickets, conferenceName)
+	console.Success(fmt.Sprintf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email))
+	console.Info(fmt.Sprintf("%v tickets remaining for %v\n", remainingTickets, conferenceName))
 }
 
 func sendTicket(userTickets uint8, firstName string, lastName string, email string) {
 	defer wg.Done()
 
 	time.Sleep(10 * time.Second)
-	var ticket = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
-	fmt.Println("####################")
-	fmt.Printf("Sending ticket:\n %v \nto email address %v\n", ticket, email)
-	fmt.Println("####################")
+	var ticket = fmt.Sprintf("%v tickets to %v %v", userTickets, firstName, lastName)
+	console.Log(console.LogOptions{Msg: fmt.Sprintf("Sending %v to email address %v", ticket, email), BgColor: colors.Color.BgGreen, IsBold: true, IsBanner: true})
 }
